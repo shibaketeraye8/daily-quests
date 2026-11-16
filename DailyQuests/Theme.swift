@@ -58,6 +58,7 @@ enum Theme {
                 .frame(width: 460, height: 460)
                 .offset(y: -330)
                 .blur(radius: 30)
+                .frame(width: 0, height: 0)
 
             Circle()
                 .fill(
@@ -71,7 +72,9 @@ enum Theme {
                 .frame(width: 460, height: 460)
                 .offset(x: 160, y: 420)
                 .blur(radius: 40)
+                .frame(width: 0, height: 0)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .ignoresSafeArea()
     }
 }

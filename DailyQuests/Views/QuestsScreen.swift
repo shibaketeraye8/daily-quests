@@ -57,8 +57,9 @@ struct QuestsScreen: View {
                     .font(.display(25))
                     .foregroundStyle(Theme.goldLight)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.75)
+                    .minimumScaleFactor(0.6)
             }
+            .layoutPriority(1)
 
             Spacer(minLength: 4)
 
@@ -73,6 +74,7 @@ struct QuestsScreen: View {
                         .font(.display(14, weight: .semibold))
                         .monospacedDigit()
                         .foregroundStyle(Theme.gold)
+                        .lineLimit(1)
                 }
             }
         }
