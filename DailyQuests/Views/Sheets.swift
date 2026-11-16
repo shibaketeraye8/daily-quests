@@ -351,102 +351,121 @@ struct OnboardingSheet: View {
         ("⚔️", "Каждый день — 5 новых квестов. Главный всегда один: пройти 10 000 шагов (цель меняется от сложности)."),
         ("👟", "Шаги считаются автоматически датчиком движения iPhone. Остальные квесты отмечаешь сам."),
         ("🔥", "День идёт в стрик, если закрыто 3 из 5 квестов. Все пять — идеальный день и бонус +50 XP."),
-        ("🛡️", "За квесты дают XP, за XP — уровни и титулы. В журнале видно историю и график недели.")
+        ("👑", "За квесты дают XP, за XP — уровни и титулы. В журнале видно историю и график недели.")
     ]
 
     var body: some View {
-        ZStack {
-            Theme.bg.ignoresSafeArea()
+        GeometryReader { proxy in
+            ZStack {
+                Theme.background
 
-            VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        Text("🛡️")
-                            .font(.system(size: 52))
-                            .padding(.top, 34)
-                            .padding(.bottom, 12)
+                        emblem
 
                         Text("ЕЖЕДНЕВНЫЕ КВЕСТЫ")
                             .font(.system(size: 9.5, weight: .semibold))
-                            .tracking(2.4)
+                            .tracking(2.6)
                             .foregroundStyle(Theme.goldDeep)
 
                         Text("Твой путь героя")
-                            .font(.display(27))
+                            .font(.display(28))
                             .foregroundStyle(Theme.goldLight)
-                            .padding(.top, 5)
+                            .padding(.top, 6)
 
-                        Text("Маленькие квесты каждый день — большие перемены за месяц.")
-                            .font(.system(size: 12))
+                        Text("Маленькие квесты каждый день —\nбольшие перемены за месяц.")
+                            .font(.system(size: 12.5))
                             .foregroundStyle(Theme.muted)
                             .multilineTextAlignment(.center)
                             .lineSpacing(3)
-                            .padding(.horizontal, 22)
-                            .padding(.top, 8)
+                            .padding(.top, 9)
 
-                        VStack(spacing: 10) {
+                        VStack(spacing: 12) {
                             ForEach(lines.indices, id: \.self) { index in
                                 let line = lines[index]
                                 HStack(alignment: .top, spacing: 12) {
                                     Text(line.0)
-                                        .font(.system(size: 17))
-                                        .frame(width: 34, height: 34)
+                                        .font(.system(size: 16))
+                                        .frame(width: 38, height: 38)
                                         .background(
-                                            RoundedRectangle(cornerRadius: 10)
-                                                .fill(Theme.gold.opacity(0.09))
+                                            RoundedRectangle(cornerRadius: 11, style: .continuous)
+                                                .fill(Theme.gold.opacity(0.08))
                                         )
                                         .overlay(
-                                            RoundedRectangle(cornerRadius: 10)
+                                            RoundedRectangle(cornerRadius: 11, style: .continuous)
                                                 .strokeBorder(Theme.gold.opacity(0.22), lineWidth: 1)
                                         )
 
                                     Text(line.1)
-                                        .font(.system(size: 12))
-                                        .foregroundStyle(Theme.text.opacity(0.9))
-                                        .lineSpacing(3)
+                                        .font(.system(size: 12.5))
+                                        .foregroundStyle(Theme.text.opacity(0.92))
+                                        .lineSpacing(3.5)
                                         .fixedSize(horizontal: false, vertical: true)
 
                                     Spacer(minLength: 0)
                                 }
                             }
                         }
-                        .padding(.horizontal, 18)
-                        .padding(.top, 22)
-                        .padding(.bottom, 24)
+                        .padding(.top, 26)
+
+                        Text("Бесплатно · без аккаунтов · всё хранится на iPhone")
+                            .font(.system(size: 10))
+                            .foregroundStyle(Theme.muted.opacity(0.6))
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 24)
+                            .padding(.bottom, 14)
+
+                        startButton
                     }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 20)
+                    .frame(maxWidth: .infinity)
+                    .frame(minHeight: proxy.size.height, alignment: .center)
                 }
                 .scrollIndicators(.hidden)
-
-                Button {
-                    Haptics.success()
-                    game.onboarded = true
-                    dismiss()
-                } label: {
-                    Text("Начать путь")
-                        .font(.display(17, weight: .bold))
-                        .foregroundStyle(Color(hex: 0x1A1206))
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 15)
-                        .background(
-                            RoundedRectangle(cornerRadius: 13, style: .continuous)
-                                .fill(
-                                    LinearGradient(
-                                        colors: [Theme.goldLight, Theme.gold, Theme.goldDeep],
-                                        startPoint: .top,
-                                        endPoint: .bottom
-                                    )
-                                )
-                        )
-                }
-                .buttonStyle(.plain)
-                .padding(.horizontal, 18)
-                .padding(.top, 8)
-                .padding(.bottom, 18)
             }
         }
         .interactiveDismissDisabled()
-        .presentationDragIndicator(.hidden)
-        .presentationDetents([.large])
+    }
+
+    private var emblem: some View {
+        Image("Emblem")
+            .resizable()
+            .interpolation(.high)
+            .frame(width: 84, height: 84)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .strokeBorder(Theme.gold.opacity(0.32), lineWidth: 1)
+            )
+            .shadow(color: Theme.gold.opacity(0.16), radius: 20, x: 0, y: 10)
+            .padding(.bottom, 20)
+    }
+
+    private var startButton: some View {
+        Button {
+            Haptics.success()
+            game.onboarded = true
+            dismiss()
+        } label: {
+            Text("Начать путь")
+                .font(.display(17, weight: .bold))
+                .foregroundStyle(Color(hex: 0x1A1206))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 15)
+                .background(
+                    RoundedRectangle(cornerRadius: 13, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [Theme.goldLight, Theme.gold, Theme.goldDeep],
+                                startPoint: .top,
+                                endPoint: .bottom
+                            )
+                        )
+                )
+        }
+        .buttonStyle(.plain)
+        .padding(.horizontal, 2)
     }
 }
 

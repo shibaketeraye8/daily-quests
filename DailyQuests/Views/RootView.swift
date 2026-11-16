@@ -86,7 +86,7 @@ struct RootView: View {
         .sheet(isPresented: $showSettings) {
             SettingsSheet()
         }
-        .sheet(isPresented: $showOnboarding) {
+        .fullScreenCover(isPresented: $showOnboarding) {
             OnboardingSheet()
         }
         .environmentObject(pedometer)
